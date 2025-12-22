@@ -1,0 +1,268 @@
+Week 9: Search and Constraint
+Satisfaction Problems
+
+Dr. Miqing Li
+
+What is Search?
+◆
+
+Search is not about prediction but about choice and decisionmaking, such as planning and assigning. Examples: path-finding
+(Google map), taking next move in games (Chess, Go), and task
+assigning (Uber taxi).
+
+◆
+
+Search techniques are universal problem-solving methods.
+
+Search is a computational problem where the goal is to
+find a solution, often a sequence of actions or a state, that
+transforms an initial state into a goal state, by exploring a
+space of possible solutions.
+
+Agenda
+◆
+
+Week 9: Search and Constraint
+Satisfaction Problems (CSPs)
+
+◆
+
+Week 10: Solving CSPs
+
+◆
+
+Week 11: Games
+
+Office hours: 16:30-17:30, Monday, drop by in person:
+room 212 in the School of Computer Science; online:
+https://bham-ac-uk.zoom.us/j/2066382427
+
+What we learn today
+
+◆
+
+Search recap
+
+◆
+
+Constraint Satisfaction Problems:
+A formal representation language
+of a large class of search problems
+
+Search Problems
+◆
+
+Search is the process of navigating from the start state to a goal
+state by transitioning through intermediate states.
+
+◆
+
+A search problem consists of
+◆
+◆
+◆
+◆
+◆
+
+◆
+
+State space: all possible states.
+Start state: where the agent begins the search.
+Goal state: the desired state that the agent is looking for.
+Goal test: whether the goal state is achieved or not.
+A successor function (also called transition function, often associated
+with a cost): given a certain state, what actions are available and for
+those actions what are the next stage the agent will land into.
+
+A solution is a sequence of actions which transforms the start
+state to a goal state.
+
+State Space Graph and Search Tree
+◆
+
+State space graph: a mathematical
+representation of a search problem.
+◆
+◆
+
+◆
+
+A
+
+Nodes represent states.
+Arcs represent transitions.
+
+A search tree: the process of solving the search
+problem can be abstracted as a search tree.
+◆
+
+◆
+◆
+
+C
+
+S
+
+The start state is the root node.
+Children correspond to successors.
+Nodes show states, but correspond to plans (i.e.,
+paths) that achieve those states.
+
+B
+
+G
+S
+B
+
+A
+B
+
+C
+
+C
+
+C
+
+G
+
+G
+
+G
+
+State Space Graph and Search Tree
+◆
+
+State space graph: a mathematical
+representation of a search problem.
+◆
+◆
+
+◆
+
+A
+
+Nodes represent states.
+Arcs represent transitions.
+
+A search tree: the process of solving the search
+problem can be abstracted as a search tree.
+◆
+
+◆
+◆
+
+C
+
+S
+
+The start state is the root node
+Children correspond to successors
+Nodes show states, but correspond to plans (i.e.,
+paths) that achieve those states.
+
+B
+
+G
+S
+B
+
+A
+B
+
+C
+
+C
+
+C
+
+G
+
+G
+
+G
+
+Generic tree search
+function Tree-Search (problem, strategy) returns a solution, or failure
+initialise the search tree via setting the start state of problem as root node and put
+it in Frontier
+loop do
+if there are no nodes in Frontier for expansion then return failure
+else choose a node in Frontier for expansion according to strategy and
+remove it from Frontier
+if the chosen node is a goal state then return the corresponding solution
+else expand the node based on problem and add the resulting nodes to Frontier
+end
+
+◆
+
+Frontier: to store the nodes waiting for expansion.
+
+◆
+
+Expansion: to find and display the children of the node.
+
+◆
+
+Expansion strategy: to decide which node in Frontier to expand
+(like depth first search), also called to explore.
+
+Example: Using Depth-First Search (DFS) to solve the
+following search problem
+S
+A
+
+C
+
+S
+
+G
+
+B
+◆
+
+What is the order of the
+nodes to be expanded by
+DFS in this example (tie will
+be broken alphabetically)?
+S -> A -> B -> C -> G
+
+B
+
+A
+
+B
+
+C
+
+C
+
+C
+
+G
+
+G
+
+G
+Nodes in circle mean those in the search
+tree, including the expanded ones (shaded)
+or to be expanded (i.e. in the frontier).
+
+Exercise
+
+◆
+
+Find the order of the nodes to be expanded by depth-first
+search (tie is broken from left to right)
+
+Exercise
+
+◆
+
+Find the order of the nodes to be expanded by depth-first
+search (tie is broken from left to right)
+
+This is a sample document.
+It has multiple lines.
+We will chunk and embed it.
+Chunking is useful for large texts.
+Embeddings help find similar pieces of text.
