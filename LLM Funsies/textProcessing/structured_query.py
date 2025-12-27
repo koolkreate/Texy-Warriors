@@ -1,11 +1,12 @@
 # language_agent/structured_query.py
 #Try guess which comments i wrote, and which bossman wrote
+# Ibr don't know what it does, but we can prolly come back to this!
 import json
 import time
 import requests
 from typing import List, Dict, Optional, Any
 from pydantic import BaseModel, Field, ValidationError
-from .textProcessing import LanguageAgent
+from .main_agent import LanguageAgent
 
 #Guess which code might also have to be refactored entirely!!!!!
 

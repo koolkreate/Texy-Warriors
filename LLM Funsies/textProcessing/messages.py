@@ -1,11 +1,12 @@
 # base_message.py
-
+#I explain the class method data class yap here!
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from typing import Optional
-
+# This code isn't really used now, but may be useful in the future?
 # So in the class we are using dataclass; this refers to a wrapper which automatically does the def ___init__self stuff, adds a to string function, and an eq function which allows us to compare instances of this class
+
 @dataclass
 class BaseMessage(ABC):
     """

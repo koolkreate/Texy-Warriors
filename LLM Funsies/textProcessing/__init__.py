@@ -10,20 +10,21 @@ Core components for building agentic systems with reasoning capabilities.
 from .messages import BaseMessage, SystemMessage, ChatMessage
 
 # Core agent
-from .language_agent import LanguageAgent
+# Core agent
+from .main_agent import LanguageAgent, GeminiAgent
 
-# # Reasoning chain components
+# Reasoning chain components
 # from .reasoning_chain import (
 #     ReasoningChain, 
 #     run_structured_reasoning_chain,
 #     reason_and_return_output
 # )
 
-# # Goal-oriented planner
-# from .goal_oriented_planner import GoalOrientedPlanner, PlanningStep
+# Goal-oriented planner
+from .goal_oriented_planner import GoalOrientedPlanner, PlanningStep
 
 # Structured query components
-from .structured_query import BaseStructuredModel, IPIPStructuredModel, StructuredQueryEngine
+from .structured_query import BaseStructuredModel, StructuredQueryEngine
 
 __version__ = "0.7.0"
 __author__ = "Kwame T"
@@ -36,6 +37,7 @@ __all__ = [
     
     # Core agent
     "LanguageAgent",
+    "GeminiAgent",
     
     # # Reasoning chain
     # "ReasoningChain",

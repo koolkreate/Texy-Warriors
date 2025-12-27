@@ -1,7 +1,7 @@
 # toy_chunking.py
 
 import os
-from language_agent.chunker import ChunkedDocument
+from textProcessing.chunker import ChunkedDocument
 
 def main():
     """
