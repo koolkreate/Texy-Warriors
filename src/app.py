@@ -51,8 +51,14 @@ def login():
 #Using REST API endpoints to handle authentication at the moment
 @loginRequired
 @app.route("/users/<user_id>", methods=["GET"])
-def checkUser(user_id):
-    return ""
+def checkUser(user, user_id):
+
+    #For now only users can access their own information
+    # TODO: Change this later on for admin access - right now it's not important
+    if user["sub"] == user_id:
+        return "Valid"
+    else:
+        return "Invalid"
 
 #Runs flask application
 if __name__ == '__main__':
