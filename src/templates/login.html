@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form>
+    <div
+        class ="px-4 py-2"
+    >
+        {{ form.email.label }}<br>{{ form.email() }}
+    
+    </div>
+    
+    <div
+        class ="px-4 py-2"
+    >
+       {{ form.password.label }}<br>{{ form.password() }}
+    </div>
+        
+    <p>
+        
+    <div
+        class ="px-4 py-2"
+    >
+        <input 
+            type = "submit"
+            value = "Submit"
+            class="bg-blue-600 text-white px-4 py-2 rounded"
+        >
+        </input>
+    </div>        
+
+</form>
+{% endblock %}
