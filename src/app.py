@@ -48,6 +48,7 @@ def login():
 
     return render_template("login.html", form=loginForm)
 
+#Using REST API endpoints to handle authentication at the moment
 @loginRequired
 @app.route("/users/<user_id>", methods=["GET"])
 def checkUser(user_id):
