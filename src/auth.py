@@ -40,3 +40,4 @@ def loginRequired(f):
         if not user:
             abort(401)
         return f(user, *args, **kwargs)
+    return wrapper
