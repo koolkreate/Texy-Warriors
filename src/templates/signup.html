@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form>
+    <div
+        class ="px-4 py-2"
+    >
+        {{ form.username.label }}<br>{{ form.username() }}
+    
+    </div>
+ 
+
+    <div
+        class ="px-4 py-2"
+    >
+        {{ form.email.label }}<br>{{ form.email() }}
+    
+    </div>
+ 
+    <div
+        class ="px-4 py-2"
+    >
+       {{ form.firstName.label }}<br>{{ form.firstName() }}
+    </div>    
+
+    <div
+        class ="px-4 py-2"
+    >
+       {{ form.middleNames.label }}<br>{{ form.middleNames() }}
+    </div>    
+
+    <div
+        class ="px-4 py-2"
+    >
+       {{ form.surname.label }}<br>{{ form.surname() }}
+    </div>
+    
+    <div
+        class ="px-4 py-2"
+    >
+       {{ form.password.label }}<br>{{ form.password() }}
+    </div>
+
+    <div
+        class ="px-4 py-2"
+    >
+       {{ form.confirmPassword.label }}<br>{{ form.confirmPassword() }}
+    </div>    
+
+    <p>
+        
+    <div
+        class ="px-4 py-2"
+    >
+        <input 
+            type = "submit"
+            value = "Submit"
+            class="bg-blue-600 text-white px-4 py-2 rounded"
+        >
+        </input>
+    </div>        
+
+</form>
+{% endblock %}

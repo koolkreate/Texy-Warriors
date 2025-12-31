@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from forms import LoginForm
+from forms import LoginForm, SignUpForm
 from flask_login import LoginManager
 from supabase import create_client, Client
 from auth import loginRequired
@@ -34,17 +34,52 @@ supabase: Client = create_client(url, key)
 def home():
     return render_template("homepage.html")
 
+@app.route("/signup", methods =["GET"])
+def signUp():
+    signUpForm = SignUpForm()
+    if signUpForm.validate_on_submit():
+        signUpData = {
+            "email" : signUpForm.email.data,
+            "password": signUpForm.password.data
+        }
+
+        try:
+            response = supabase.auth.sign_up(signUpData)
+            accessToken = response.session.access_token
+
+            return jsonify({"token": accessToken}), 200
+
+        except Exception as e:
+            return jsonify({"error": str(e)}), 401
+    
+    return render_template("login.html", form=signUpForm)
+
 #Routes to login page
-@app.route("/login")
+@app.route("/login", methods=["GET", "POST"])
 def login():
     loginForm = LoginForm()
 
     if loginForm.validate_on_submit():
+        #Here for debugging reasons although redundant
         email = loginForm.email.data
         password = loginForm.password.data
 
+        loginData = {
+            "email": loginForm.email.data,
+            "password": loginForm.password.data
+        }
+
+        try:
+            response = supabase.auth.sign_in_with_password(loginData)
+            accessToken = response.session.access_token
+
+            return jsonify({"token": accessToken}), 200
+
+        except Exception as e:
+            return jsonify({"error": str(e)}), 401
+
         print(email, password)
-        #Check logic
+        #TODO:Check logic
 
     return render_template("login.html", form=loginForm)
 
