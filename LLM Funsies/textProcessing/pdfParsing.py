@@ -21,24 +21,19 @@ from pydantic import BaseModel, Field
 
 class ImageAnalysis(BaseModel):
     category: str = Field(..., description="Technical category (e.g., 'Constraint Graph', 'Grid', 'Algebraic Equation').")
-    
     core_concept: str = Field(..., description="The main concept visualized (e.g., 'Sudoku as CSP', 'Domain size calculation').")
-    
     structural_elements: List[str] = Field(..., description="Specific entities (e.g., 'Node WA', 'Variable X1', 'Grid 9x9').")
-    
     relationships_logic: str = Field(..., description="How elements interact or constraints apply.")
-    
     math_formula_present: bool = Field(
         False, 
         description="True if the image contains LaTeX, formal equations, or complex mathematical notation."
     )
-    
     latex_transcription: Optional[str] = Field(
         None, 
         description="A best-effort transcription of math formulas if present. Use standard LaTeX format."
     )
-
     pedagogical_value: str = Field(..., description="Why this visual is in the lecture.")
+
 class pdfParser:
     def __init__(self, file):
         self.file_path = file
@@ -68,12 +63,9 @@ class pdfParser:
         basename = os.path.basename(original_path)
         dirname = os.path.dirname(original_path)
         
-        # Regex to find page and index from pymupdf's default naming
-        # Format usually: {doc}-{page}-{index}.ext (e.g. CSP.pdf-0001-01.png)
-        # We look for the last two hyphenated number groups
         m_file = re.search(r'-(\d+)-(\d+)\.(png|jpg|jpeg)$', basename)
         if m_file:
-            page_num = int(m_file.group(1)) # Convert to int to remove leading zeros if desired, or keep str
+            page_num = int(m_file.group(1))
             img_idx = int(m_file.group(2))
             ext = m_file.group(3)
             
@@ -128,7 +120,6 @@ class pdfParser:
         api_key_path = "apiKey/captionApi.txt"
         with open(api_key_path, "r") as f:
             api_key = f.read().strip()
-
         
         processedImages = {} 
         
@@ -242,9 +233,9 @@ class pdfParser:
 
 
 # Usage
-parser = pdfParser("CSP.pdf")
-# markdown_output = parser.parse_pdf()
-# parser.generate_captions_parallel(context = "Constraint Satisfaction Problems; an AI lecture.")
+parser = pdfParser("assembler.pdf")
+markdown_output = parser.parse_pdf()
+parser.generate_captions_parallel(context = "Assembly Language; a Computer Systems lecture.")
 parser.add_explanation()
 # # 2. Define your Headers (Authorization, etc.)
 # headers = {
@@ -256,5 +247,6 @@ parser.add_explanation()
 
 
 # # 4. Make the request
+# #  soms was here teeheeee
 
 # parse_pdf("CSP.pdf")
