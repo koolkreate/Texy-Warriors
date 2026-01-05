@@ -1,5 +1,0 @@
-This is a sample document.
-It has multiple lines.
-We will chunk and embed it.
-Chunking is useful for large texts.
-Embeddings help find similar pieces of text.

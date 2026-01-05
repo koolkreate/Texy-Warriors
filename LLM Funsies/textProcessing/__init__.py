@@ -20,8 +20,7 @@ from .main_agent import LanguageAgent, GeminiAgent
 #     reason_and_return_output
 # )
 
-# Goal-oriented planner
-from .goal_oriented_planner import GoalOrientedPlanner, PlanningStep
+
 
 # Structured query components
 from .structured_query import BaseStructuredModel, StructuredQueryEngine
@@ -44,9 +43,7 @@ __all__ = [
     # "run_structured_reasoning_chain",
     # "reason_and_return_output",
     
-    # Lesson planner
-    "GoalOrientedPlanner",
-    "PlanningStep",
+    
     
     # Structured query
     "BaseStructuredModel",

@@ -53,7 +53,7 @@ class pdfParser:
         self.currentText = re.sub(r'!\[\]\((.*?)\)', self.replacer, self.currentText)
         
         print("Parsed and Saved")
-        with open(f"{self.doc_ending}.md", "w", encoding="utf-8") as f:
+        with open(f"testLecture/{self.doc_ending}.md", "w", encoding="utf-8") as f:
             f.write(self.currentText)
         
         return self.currentText

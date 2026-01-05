@@ -83,10 +83,10 @@ class ChunkedDocument:
 
     def chunk_text(self):
         """
-        Runs the chunking process and creates the chunks based on token count.
-        Uses a more robust tokenization approach to avoid splitting subwords poorly.
+        Runs the chunking process and creates the chunks based on token count,
+        respecting semantic boundaries (paragraphs/blocks) where possible.
         """
-        print(f"Starting chunking for '{self.filename}' (Chunk size: {self.chunk_size} tokens)...")
+        print(f"Starting smart chunking for '{self.filename}' (Chunk size: {self.chunk_size} tokens)...")
         
         try:
             with open(self.filepath, 'r', encoding='utf-8') as f:
@@ -102,38 +102,80 @@ class ChunkedDocument:
         # Use the tokenizer associated with the embedding model for consistency
         tokenizer = AutoTokenizer.from_pretrained("sentence-transformers/all-MiniLM-L6-v2")
         
-        # --- Robust Chunking Logic ---
         self.chunks = []
-        tokens = tokenizer.encode(document_text, add_special_tokens=False)
-        total_tokens = len(tokens)
-        print(f"Total tokens in document: {total_tokens}")
+        
+        # Split text into blocks based on double newlines to preserve paragraphs and visual context sections
+        # We use a simple split by double newline as a proxy for semantic blocks.
+        # This keeps "Visual Context" blocks (which are usually blockquotes) together 
+        # as long as they don't have internal double newlines.
+        blocks = document_text.split('\n\n')
+        
+        current_chunk_blocks = []
+        current_chunk_tokens = 0
+        current_doc_token_pos = 0 # Track global token position if needed (though approximate if we rejoin)
 
-        start_token_idx = 0
-        while start_token_idx < total_tokens:
-            # Determine the end index for this chunk
-            end_token_idx = min(start_token_idx + self.chunk_size, total_tokens)
+        for block in blocks:
+            # Tokenize the block to get its size
+            # We strip the block to avoid counting excess whitespace, but we'll rejoin with \n\n later
+            block_content = block.strip()
+            if not block_content:
+                continue
+                
+            block_tokens = tokenizer.encode(block_content, add_special_tokens=False)
+            num_block_tokens = len(block_tokens)
             
+            # Check if adding this block would exceed the chunk size
+            if current_chunk_tokens + num_block_tokens > self.chunk_size:
+                # If we have accumulated blocks, finalize the current chunk
+                if current_chunk_blocks:
+                    self._create_and_add_chunk(current_chunk_blocks, current_doc_token_pos, tokenizer)
+                    current_doc_token_pos += current_chunk_tokens
+                    
+                    # Reset for new chunk
+                    current_chunk_blocks = []
+                    current_chunk_tokens = 0
+                
+                # Now handle the current block
+                # If the block itself is larger than chunk_size, we might need to split it
+                # or just accept it as a large chunk to preserve integrity.
+                # Use a soft limit: if it's massive (> 1.5x chunk size), maybe split? 
+                # For now, per user request to "chunk correctly" with context, we prioritize keeping it intact.
+                if num_block_tokens > self.chunk_size:
+                     # Add it as a single oversize chunk for now to ensure we don't break Visual Context.
+                     current_chunk_blocks.append(block_content)
+                     current_chunk_tokens += num_block_tokens
+                else:
+                    current_chunk_blocks.append(block_content)
+                    current_chunk_tokens += num_block_tokens
+            else:
+                # Add block to current chunk
+                current_chunk_blocks.append(block_content)
+                current_chunk_tokens += num_block_tokens
 
-            # Extract tokens for the current chunk
-            chunk_tokens = tokens[start_token_idx:end_token_idx]
-            
-            # Decode tokens back to text for the chunk
-            # skip_special_tokens should be True for user text tokenization
-            chunk_text = tokenizer.decode(chunk_tokens, skip_special_tokens=True)
-
-            # Create the Chunk object
-            chunk = Chunk(
-                start_pos=start_token_idx,
-                end_pos=end_token_idx,
-                num_tokens=len(chunk_tokens), # Should be the same as end_pos - start_pos
-                text=chunk_text
-            )
-            self.chunks.append(chunk)
-            
-            # Move to the next chunk
-            start_token_idx = end_token_idx
+        # Finalize any remaining blocks
+        if current_chunk_blocks:
+            self._create_and_add_chunk(current_chunk_blocks, current_doc_token_pos, tokenizer)
 
         print(f"Chunking complete. Created {len(self.chunks)} chunks.")
+
+    def _create_and_add_chunk(self, blocks: List[str], start_pos: int, tokenizer):
+        """Helper to create a Chunk object from a list of text blocks."""
+        # Join blocks with double newlines to reconstruct the text
+        chunk_text = "\n\n".join(blocks)
+        
+        # Recalculate exact tokens for the final chunk text (including the joined newlines)
+        chunk_tokens = tokenizer.encode(chunk_text, add_special_tokens=False)
+        num_tokens = len(chunk_tokens)
+        
+        end_pos = start_pos + num_tokens
+        
+        chunk = Chunk(
+            start_pos=start_pos,
+            end_pos=end_pos,
+            num_tokens=num_tokens,
+            text=chunk_text
+        )
+        self.chunks.append(chunk)
 
     def get_chunk_text(self) -> List[str]:
         """
